@@ -1,0 +1,21 @@
+{
+  "goleiros": [],
+  "jogadores": [
+    { "nome": "Nico Braga", "pago": false },
+    { "nome": "Duda Neri", "pago": false },
+    { "nome": "ruy pacheco", "pago": false },
+    { "nome": "Iago Leme", "pago": false },
+    { "nome": "Bento Cruz", "pago": false },
+    { "nome": "Luan Ferraz", "pago": false },
+    { "nome": "Enzo Paiva", "pago": false },
+    { "nome": "milo castro", "pago": false },
+    { "nome": "Gael Moura", "pago": false },
+    { "nome": "Renzo M", "pago": false }
+  ],
+  "espera": [],
+  "jogo": {
+    "data": "Quarta-Feira – 14/10",
+    "horario": "20:30h",
+    "local": "Campo Municipal"
+  }
+}

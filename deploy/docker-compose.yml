@@ -1,0 +1,108 @@
+# Local development only: WAHA (the WhatsApp gateway) and the bot on a private
+# Compose network. In production the same two services run on Railway.
+# How to use it: see the README.
+#
+# Each WAHA variable below says where it was checked (on 2026-10-10):
+#   docs  = https://waha.devlike.pro/docs/how-to/<page>/
+#   image = compiled code inside the pinned image (/app/dist/...)
+#   run   = a local `docker compose up` of this file, with no number paired
+
+# Fixed project name: the session volume is the same in any checkout or
+# worktree, so the number is not paired again by accident.
+name: peladabot
+
+services:
+  waha:
+    # WAHA 2026.9.2, the newest release on Docker Hub (published on 2026-10-02).
+    # WAHA has no multi-arch image: gows-2026.9.2 is amd64 and gows-arm-2026.9.2
+    # is arm64 (Apple Silicon). WAHA_ARCH_SUFFIX in .env picks one.
+    image: devlikeapro/waha:gows${WAHA_ARCH_SUFFIX:-}-2026.9.2
+    environment:
+      # Checked: docs config ("Engines"), image (the gows tag already sets it), run (log: GOWS).
+      WHATSAPP_DEFAULT_ENGINE: GOWS
+      # Checked: docs config and security, image /entrypoint.sh (hashes a plaintext key),
+      # run (401 without it, 200 with it). It has to stay fixed: without one, WAHA invents
+      # a new key on every start and the bot loses access.
+      WAHA_API_KEY: ${WAHA_API_KEY:?Set WAHA_API_KEY in .env (see .env.example)}
+      # Checked: docs config ("Dashboard"), image core/auth/config.js, run (login works).
+      WAHA_DASHBOARD_USERNAME: ${WAHA_DASHBOARD_USERNAME:-admin}
+      # Checked: the same sources as above. WAHA replaces common values (admin, waha, 123) with a random one.
+      WAHA_DASHBOARD_PASSWORD: ${WAHA_DASHBOARD_PASSWORD:?Set WAHA_DASHBOARD_PASSWORD in .env (see .env.example)}
+      # Both checked: docs config ("Swagger"), image core/auth/config.js, run (login works).
+      # Swagger reuses the dashboard login.
+      WHATSAPP_SWAGGER_USERNAME: ${WAHA_DASHBOARD_USERNAME:-admin}
+      WHATSAPP_SWAGGER_PASSWORD: ${WAHA_DASHBOARD_PASSWORD:?Set WAHA_DASHBOARD_PASSWORD in .env (see .env.example)}
+      # Checked: docs config ("Webhooks"), image modules/waha-webhook/webhook.config.js,
+      # run (the bot received POST /webhooks/waha).
+      WHATSAPP_HOOK_URL: http://bot:8080/webhooks/waha
+      # Checked: docs events, the same file, run (session.status delivered; message needs a
+      # paired number). Comma-separated, no spaces: WAHA does not trim the names and
+      # refuses to start when one of them is unknown.
+      WHATSAPP_HOOK_EVENTS: message,session.status
+      # Checked: docs events, image modules/waha-webhook/webhook.config.js and WebhookPlugin.sender.js
+      # (X-Webhook-Hmac = HMAC-SHA512 hex of the raw body), and the image running alone with `docker run`
+      # instead of this file: the bot received the signed session.status and answered 401 for another key.
+      # The bot checks the signature with the same value (Waha__ChaveHmacDoWebhook below).
+      WHATSAPP_HOOK_HMAC_KEY: ${WAHA_WEBHOOK_HMAC_KEY:?Set WAHA_WEBHOOK_HMAC_KEY in .env (see .env.example)}
+    volumes:
+      # The phone pairing lives here; losing it means scanning the QR code again.
+      # Path checked: docs config (WAHA_LOCAL_STORE_BASE_DIR) and image core/storage/LocalStoreCore.js.
+      - waha_sessions:/app/.sessions
+    ports:
+      # Dashboard and API on this machine only: http://localhost:3000/dashboard
+      - "127.0.0.1:3000:3000"
+    healthcheck:
+      # /ping needs no API key (image core/app.module.core.js); the image ships curl.
+      test: ["CMD", "curl", "--fail", "--silent", "--output", "/dev/null", "http://localhost:3000/ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+      start_interval: 2s
+
+  bot:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        # The Six Labors key for the ImageSharp 4 Release build. It stays in the
+        # Dockerfile build stage and never reaches the final image.
+        SIXLABORS_LICENSE_KEY: ${SIXLABORS_LICENSE_KEY:?Set SIXLABORS_LICENSE_KEY in .env (see .env.example)}
+    image: peladabot:local
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      # The bot's WAHA client (src/PeladaBot/WhatsApp/ClienteWaha.cs): the API on the private network and its
+      # key, sent in the X-Api-Key header. The session name comes from appsettings.json ("default").
+      Waha__UrlBase: http://waha:3000
+      Waha__ChaveDaApi: ${WAHA_API_KEY:?Set WAHA_API_KEY in .env (see .env.example)}
+      # The key WAHA uses to sign every webhook (WHATSAPP_HOOK_HMAC_KEY above). The bot answers 401 to a
+      # webhook whose X-Webhook-Hmac does not match (src/PeladaBot/Filtros/FiltroDeAssinaturaDoWaha.cs).
+      Waha__ChaveHmacDoWebhook: ${WAHA_WEBHOOK_HMAC_KEY:?Set WAHA_WEBHOOK_HMAC_KEY in .env (see .env.example)}
+      # Bot configuration. Empty by default so WAHA can start
+      # alone for pairing; the bot itself refuses to start and logs what is missing.
+      Bot__Grupos__0__Id: ${BOT_GROUP_ID:-}
+      Bot__Grupos__0__Presidencia__0__Nome: ${BOT_PRESIDENT_NAME:-Presidente}
+      Bot__Grupos__0__Presidencia__0__Ids__0: ${BOT_PRESIDENT_ID:-}
+      # Optional: the president's second id (LID) and the vice. Uncomment only when you have
+      # the values; an empty id fails validation on purpose.
+      # Bot__Grupos__0__Presidencia__0__Ids__1: ${BOT_PRESIDENT_LID}
+      # Bot__Grupos__0__Presidencia__1__Nome: Vice
+      # Bot__Grupos__0__Presidencia__1__Ids__0: ${BOT_VICE_ID}
+    ports:
+      # On this machine only, to see the bot respond: curl -i http://localhost:8080/
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      waha:
+        condition: service_healthy
+    healthcheck:
+      # The aspnet image has neither curl nor wget, so bash opens a TCP connection to
+      # Kestrel. Replace this with an HTTP check when the bot has a health endpoint.
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+      start_interval: 2s
+
+volumes:
+  waha_sessions:

@@ -1,0 +1,72 @@
+[
+  {
+    "id": "false_120363000000001234@g.us_3EB0A4C2E9F1B3D50C03_35600000404@c.us",
+    "timestamp": 1791922200,
+    "from": "120363000000001234@g.us",
+    "fromMe": false,
+    "source": "app",
+    "body": "bora que amanhã tem jogo",
+    "to": "35600000404@c.us",
+    "participant": "35600000404@c.us",
+    "hasMedia": false,
+    "media": null,
+    "ack": 2,
+    "location": null,
+    "vCards": [],
+    "ackName": "DEVICE",
+    "replyTo": null,
+    "_data": {
+      "Info": {
+        "Chat": "120363000000001234@g.us",
+        "Sender": "35600000404@s.whatsapp.net",
+        "IsFromMe": false,
+        "IsGroup": true,
+        "AddressingMode": "pn",
+        "ID": "3EB0A4C2E9F1B3D50C03",
+        "Type": "text",
+        "PushName": "Integrante Beltrano",
+        "Timestamp": "2026-10-13T20:10:00Z",
+        "Edit": ""
+      },
+      "Message": {
+        "conversation": "bora que amanhã tem jogo"
+      },
+      "Status": 3
+    }
+  },
+  {
+    "id": "false_120363000000001234@g.us_3EB05B1F2A9C4D7E0B02_35600000101@c.us",
+    "timestamp": 1791804540,
+    "from": "120363000000001234@g.us",
+    "fromMe": false,
+    "source": "app",
+    "body": "⚽PRÓXIMO JOGO⚽\n\nData: Quarta-Feira – 14/10\nHorário: 20:30h\nLocal: Campo Municipal\nGoleiros: FREE ✅\n\nnome na lista será confirmado apenas mediante o pagamento\n\nGoleiros fixos:\n1. Téo Vargas🧤\n2. Cauã Luz 🧤\n\nLista de jogadores:\n\n1. Nico Braga ✅\n2. Duda Neri ✅\n3. Ruy Pacheco ✅\n4. Iago Leme ✅\n5. Bento Cruz ✅\n6. Luan Ferraz ✅\n7. Enzo Paiva ✅\n8. Milo Castro ✅\n9. Gael Moura ✅\n10. Renzo M ✅\n11. Kaio ✅\n12. Paulo ✅\n13. Paco ✅\n14.\n15.\n\nLista de espera:\n1. Davi\n2.\n\nNota 1: Para confirmar sua presença, realize o pagamento e posteriormente adicione o seu nome na lista.",
+    "to": "35600000101@c.us",
+    "participant": "35600000101@c.us",
+    "hasMedia": false,
+    "media": null,
+    "ack": 2,
+    "location": null,
+    "vCards": [],
+    "ackName": "DEVICE",
+    "replyTo": null,
+    "_data": {
+      "Info": {
+        "Chat": "120363000000001234@g.us",
+        "Sender": "35600000101@s.whatsapp.net",
+        "IsFromMe": false,
+        "IsGroup": true,
+        "AddressingMode": "pn",
+        "ID": "3EB05B1F2A9C4D7E0B02",
+        "Type": "text",
+        "PushName": "Presidente Fulano",
+        "Timestamp": "2026-10-12T11:29:00Z",
+        "Edit": ""
+      },
+      "Message": {
+        "conversation": "⚽PRÓXIMO JOGO⚽\n\nData: Quarta-Feira – 14/10\nHorário: 20:30h\nLocal: Campo Municipal\nGoleiros: FREE ✅\n\nnome na lista será confirmado apenas mediante o pagamento\n\nGoleiros fixos:\n1. Téo Vargas🧤\n2. Cauã Luz 🧤\n\nLista de jogadores:\n\n1. Nico Braga ✅\n2. Duda Neri ✅\n3. Ruy Pacheco ✅\n4. Iago Leme ✅\n5. Bento Cruz ✅\n6. Luan Ferraz ✅\n7. Enzo Paiva ✅\n8. Milo Castro ✅\n9. Gael Moura ✅\n10. Renzo M ✅\n11. Kaio ✅\n12. Paulo ✅\n13. Paco ✅\n14.\n15.\n\nLista de espera:\n1. Davi\n2.\n\nNota 1: Para confirmar sua presença, realize o pagamento e posteriormente adicione o seu nome na lista."
+      },
+      "Status": 3
+    }
+  }
+]

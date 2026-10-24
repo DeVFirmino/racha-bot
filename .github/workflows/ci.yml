@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  # ImageSharp 4 fails a Release build without a Six Labors license key.
+  # MSBuild reads this environment variable as the SixLaborsLicenseKey property.
+  SixLaborsLicenseKey: ${{ secrets.SIXLABORS_LICENSE_KEY }}
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+
+      - name: Restore
+        run: dotnet restore
+
+      # Release needs the Six Labors key. A pull request from a fork gets no secrets, so it
+      # builds in Debug, where the license check only warns.
+      - name: Pick the configuration
+        run: echo "CONFIGURATION=${{ env.SixLaborsLicenseKey != '' && 'Release' || 'Debug' }}" >> "$GITHUB_ENV"
+
+      - name: Build
+        run: dotnet build --no-restore --configuration "$CONFIGURATION"
+
+      - name: Format check
+        run: dotnet format --verify-no-changes --no-restore
+
+      - name: Test
+        run: dotnet test --solution PeladaBot.slnx --no-build --configuration "$CONFIGURATION"

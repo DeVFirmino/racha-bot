@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <UserSecretsId>bf98fd44-8fd7-4154-9eeb-d1703b47d33b</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="Mapster" />
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
+    <PackageReference Include="SixLabors.Fonts" />
+    <PackageReference Include="SixLabors.ImageSharp" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" />
+  </ItemGroup>
+
+  <!-- O card nunca depende de fontes do sistema: os arquivos viajam dentro do assembly, com nomes de recurso fixos. -->
+  <ItemGroup>
+    <EmbeddedResource Include="Card\Fonts\**\*.ttf" LogicalName="PeladaBot.Card.Fonts.%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>

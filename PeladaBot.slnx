@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PeladaBot/PeladaBot.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PeladaBot.Tests/PeladaBot.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,37 @@
+{
+  "id": "evt_01m4jqkkxzyg4tvcb3c3vx9e7a",
+  "timestamp": 1791630102463,
+  "event": "session.status",
+  "session": "default",
+  "me": null,
+  "payload": {
+    "name": "default",
+    "status": "STOPPED",
+    "statuses": [
+      {
+        "status": "STARTING",
+        "timestamp": 1791630084991
+      },
+      {
+        "status": "SCAN_QR_CODE",
+        "timestamp": 1791630085802
+      },
+      {
+        "status": "STOPPED",
+        "timestamp": 1791630102463
+      }
+    ],
+    "data": null
+  },
+  "engine": "GOWS",
+  "environment": {
+    "version": "2026.9.2",
+    "engine": "GOWS",
+    "tier": "CORE",
+    "browser": null,
+    "platform": "linux/arm64",
+    "worker": {
+      "id": null
+    }
+  }
+}

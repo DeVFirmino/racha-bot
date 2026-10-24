@@ -1,0 +1,37 @@
+# The image only needs global.json, Directory.*.props, .editorconfig and src/.
+# Everything else stays out of the build context.
+
+# Secrets: never send local environment files to the Docker daemon
+.env
+.env.*
+
+# Build output and test results
+**/bin/
+**/obj/
+**/publish/
+**/TestResults/
+**/test-results/
+*.binlog
+*.log
+
+# Tests are not part of the image (CI runs them)
+tests/
+
+# Git, CI and editors
+.git/
+.gitignore
+.github/
+.vs/
+.vscode/
+.idea/
+**/*.user
+**/.DS_Store
+
+# Docs and research notes
+docs/
+*.md
+*.excalidraw
+
+# Container files themselves
+deploy/
+compose*.yml

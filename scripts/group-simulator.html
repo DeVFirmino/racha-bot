@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pelada simulator</title>
+<style>
+  :root {
+    --fundo: #0b141a;
+    --painel: #111b21;
+    --linha: #233138;
+    --texto: #e9edef;
+    --suave: #8696a0;
+    --meu: #005c4b;
+    --deles: #202c33;
+    --bot: #1f3a4a;
+    --destaque: #f2a33a;
+    --verde: #25d366;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body { background: var(--fundo); color: var(--texto); font: 15px/1.4 -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    display: grid; grid-template-columns: 300px 1fr; }
+  aside { background: var(--painel); border-right: 1px solid var(--linha); padding: 20px; display: flex; flex-direction: column; gap: 22px; overflow-y: auto; }
+  aside h1 { font-size: 18px; }
+  aside p.sub { color: var(--suave); font-size: 13px; margin-top: 4px; }
+  .grupo h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--suave); margin-bottom: 8px; }
+  .quem { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  button { font: inherit; color: var(--texto); background: var(--deles); border: 1px solid var(--linha); border-radius: 10px;
+    padding: 9px 10px; cursor: pointer; text-align: left; }
+  button:hover { border-color: var(--suave); }
+  button:focus-visible { outline: 2px solid var(--destaque); outline-offset: 2px; }
+  button.ativo { background: var(--meu); border-color: var(--verde); }
+  .acoes { display: flex; flex-direction: column; gap: 6px; }
+  .acoes button small { display: block; color: var(--suave); font-size: 12px; }
+  #cenarios button { font-size: 14px; padding: 7px 10px; }
+  #pagamentos { display: flex; flex-direction: column; gap: 2px; max-height: 240px; overflow-y: auto; margin-bottom: 8px; }
+  #pagamentos label { display: flex; gap: 8px; align-items: center; font-size: 14px; padding: 3px 4px; border-radius: 6px; cursor: pointer; }
+  #pagamentos label:hover { background: var(--deles); }
+  #reenviar { width: 100%; text-align: center; background: var(--meu); border-color: var(--verde); }
+  main { display: flex; flex-direction: column; min-width: 0; height: 100vh; }
+  header { background: var(--painel); border-bottom: 1px solid var(--linha); padding: 12px 20px; display: flex; align-items: center; gap: 12px; }
+  header .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--destaque); display: grid; place-items: center; font-size: 20px; }
+  header small { display: block; color: var(--suave); font-size: 13px; }
+  #conversa { flex: 1; overflow-y: auto; padding: 20px 6%; display: flex; flex-direction: column; gap: 8px; }
+  .msg { max-width: min(560px, 80%); padding: 7px 10px 6px; border-radius: 10px; white-space: pre-wrap; word-wrap: break-word; position: relative; }
+  .msg .quem { display: block; font-size: 13px; font-weight: 600; color: var(--destaque); margin-bottom: 2px; }
+  .msg .hora { display: block; text-align: right; font-size: 11px; color: var(--suave); margin-top: 2px; }
+  .msg.eu { align-self: flex-end; background: var(--meu); }
+  .msg.outro { align-self: flex-start; background: var(--deles); }
+  .msg.bot { align-self: flex-start; background: var(--bot); }
+  .msg.bot .quem { color: #8fe0b8; }
+  .msg .cita { display: block; border-left: 3px solid var(--destaque); background: rgba(0,0,0,.2); border-radius: 6px; padding: 4px 8px;
+    margin-bottom: 6px; font-size: 13px; color: var(--suave); max-height: 3.2em; overflow: hidden; }
+  .msg img { display: block; width: 100%; max-width: 420px; border-radius: 8px; margin-bottom: 6px; cursor: zoom-in; }
+  .msg.lista .corpo { max-height: 220px; overflow-y: auto; font-size: 14px; }
+  .digitando { align-self: flex-start; color: #8fe0b8; font-style: italic; font-size: 14px; padding: 4px 10px; }
+  .vazio { margin: auto; text-align: center; color: var(--suave); max-width: 380px; }
+  form { background: var(--painel); border-top: 1px solid var(--linha); padding: 10px 14px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  form input[type=text] { flex: 1; min-width: 160px; font: inherit; color: var(--texto); background: var(--deles); border: 1px solid var(--linha);
+    border-radius: 20px; padding: 10px 16px; }
+  form label { color: var(--suave); font-size: 13px; display: flex; gap: 6px; align-items: center; }
+  form button { border-radius: 20px; background: var(--verde); color: #04291c; font-weight: 700; border: 0; padding: 10px 18px; }
+  #erro { color: #ff8a80; font-size: 13px; width: 100%; }
+  dialog { border: 0; padding: 0; background: transparent; }
+  dialog::backdrop { background: rgba(0,0,0,.8); }
+  dialog img { max-width: 92vw; max-height: 92vh; border-radius: 10px; }
+  @media (max-width: 760px) {
+    body { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+    aside { border-right: 0; border-bottom: 1px solid var(--linha); padding: 14px 16px; gap: 12px; max-height: 42vh; }
+    main { height: auto; min-height: 0; }
+    #conversa { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+<aside>
+  <div>
+    <h1>Pelada simulator</h1>
+    <p class="sub">The real bot, with a fake WhatsApp. Nothing reaches a real group.</p>
+  </div>
+
+  <section class="grupo">
+    <h2>You are sending as</h2>
+    <div class="quem" id="pessoas"></div>
+  </section>
+
+  <section class="grupo">
+    <h2>Send a list</h2>
+    <div class="acoes" id="cenarios"></div>
+  </section>
+
+  <section class="grupo">
+    <h2>Payments</h2>
+    <p class="sub" id="pagamentos-vazio">Send a list, then tick who paid, one at a time, the way the president does.</p>
+    <div id="pagamentos"></div>
+    <button type="button" id="reenviar" hidden>Send the list again with the ✅</button>
+  </section>
+
+  <section class="grupo">
+    <h2>Commands</h2>
+    <div class="acoes">
+      <button type="button" data-texto="!sortear" data-citar="true">!sortear replying to the list<small>the recommended way</small></button>
+      <button type="button" data-texto="!sortear">!sortear with no reply<small>uses the president's latest list</small></button>
+      <button type="button" data-texto="!sortear pagos" data-citar="true">!sortear pagos<small>only players with ✅, replying to the list</small></button>
+      <button type="button" data-texto="!pendentes" data-citar="true">!pendentes replying to the list<small>who has not paid (president and admins any time; everyone else, every 30 min)</small></button>
+      <button type="button" data-texto="!pendentes">!pendentes with no reply<small>uses the latest list from anyone</small></button>
+      <button type="button" data-texto="!ajuda">!ajuda<small>anyone</small></button>
+    </div>
+  </section>
+</aside>
+
+<main>
+  <header>
+    <div class="avatar">⚽</div>
+    <div><strong>Wednesday pelada</strong><small id="membros">Pelada bot</small></div>
+  </header>
+  <div id="conversa" aria-live="polite">
+    <p class="vazio" id="vazio">Send a list from the panel, then <strong>!sortear replying to the list</strong>. The card shows up here.</p>
+  </div>
+  <form id="enviar">
+    <input type="text" id="texto" placeholder="A message, such as !sortear or hi" autocomplete="off">
+    <label><input type="checkbox" id="citar"> reply to the list</label>
+    <button type="submit">Send</button>
+    <div id="erro" role="alert"></div>
+  </form>
+</main>
+
+<dialog id="zoom"><img id="zoom-img" alt="Draw card, enlarged"></dialog>
+
+<script>
+  let remetente = 'presidente';
+  let pessoas = [];
+  let proximo = 0;
+  const conversa = document.getElementById('conversa');
+  const erro = document.getElementById('erro');
+
+  function escapar(texto) {
+    return texto.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // Negrito do WhatsApp: *texto* vira <b>texto</b>.
+  function formatar(texto) {
+    return escapar(texto).replace(/\*([^*\n]+)\*/g, '<b>$1</b>');
+  }
+
+  // A lista que o painel de pagamentos edita: o texto da última lista mandada no grupo.
+  let linhasDaLista = null;
+
+  function limpar(linha) {
+    return linha.replace(/[*_~]/g, '').trim();
+  }
+
+  function atualizarPagamentos(texto) {
+    linhasDaLista = texto.split('\n');
+    const painel = document.getElementById('pagamentos');
+    painel.innerHTML = '';
+    let naListaDeJogadores = false;
+    linhasDaLista.forEach((linha, indice) => {
+      const limpa = limpar(linha);
+      if (/^player list/i.test(limpa)) { naListaDeJogadores = true; return; }
+      if (/^(waiting list|fixed goalkeepers|note)/i.test(limpa)) { naListaDeJogadores = false; return; }
+      const item = naListaDeJogadores && limpa.match(/^\d+\s*[.)\-]?\s*(.*\S)/);
+      if (!item) return;
+      const nome = item[1].replace(/✅/g, '').trim();
+      if (!nome) return;
+      const rotulo = document.createElement('label');
+      const caixa = document.createElement('input');
+      caixa.type = 'checkbox';
+      caixa.checked = linha.includes('✅');
+      caixa.addEventListener('change', () => {
+        linhasDaLista[indice] = caixa.checked
+          ? linhasDaLista[indice].replace(/\s*$/, ' ✅')
+          : linhasDaLista[indice].replace(/\s*✅/g, '');
+      });
+      rotulo.append(caixa, nome);
+      painel.append(rotulo);
+    });
+    document.getElementById('pagamentos-vazio').hidden = painel.childElementCount > 0;
+    document.getElementById('reenviar').hidden = painel.childElementCount === 0;
+  }
+
+  function mostrar(evento) {
+    if (evento.tipo === 'lista') atualizarPagamentos(evento.texto);
+    document.getElementById('vazio')?.remove();
+    document.querySelectorAll('.digitando').forEach(e => e.remove());
+
+    if (evento.tipo === 'digitando') {
+      const d = document.createElement('div');
+      d.className = 'digitando';
+      d.textContent = 'Pelada bot is typing...';
+      conversa.append(d);
+      return;
+    }
+
+    const doBot = evento.tipo === 'texto' || evento.tipo === 'imagem';
+    const meu = !doBot && evento.quem === pessoas.find(p => p.id === remetente)?.nome;
+    const m = document.createElement('div');
+    m.className = 'msg ' + (doBot ? 'bot' : meu ? 'eu' : 'outro') + (evento.tipo === 'lista' ? ' lista' : '');
+    let html = `<span class="quem">${escapar(evento.quem)}</span>`;
+    if (evento.citando) {
+      html += `<span class="cita">${escapar(evento.citando.split('\n').slice(0, 2).join(' · '))}</span>`;
+    }
+    if (evento.imagem) {
+      html += `<img src="/card/${encodeURIComponent(evento.imagem)}" alt="Draw card">`;
+    }
+    html += `<div class="corpo">${formatar(evento.texto || '')}</div><span class="hora">${evento.hora}</span>`;
+    m.innerHTML = html;
+    m.querySelector('img')?.addEventListener('click', e => {
+      document.getElementById('zoom-img').src = e.target.src;
+      document.getElementById('zoom').showModal();
+    });
+    conversa.append(m);
+  }
+
+  async function buscar() {
+    try {
+      const resposta = await fetch('/api/eventos?desde=' + proximo);
+      const eventos = await resposta.json();
+      if (eventos.length) {
+        const noFim = conversa.scrollHeight - conversa.scrollTop - conversa.clientHeight < 80;
+        eventos.forEach(mostrar);
+        proximo = eventos[eventos.length - 1].n + 1;
+        if (noFim) conversa.scrollTop = conversa.scrollHeight;
+      }
+    } catch {
+      erro.textContent = 'No connection to the simulator. Is it still running in the terminal?';
+    }
+  }
+
+  async function postar(caminho, corpo) {
+    erro.textContent = '';
+    const resposta = await fetch(caminho, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ remetente, ...corpo }),
+    });
+    const dados = await resposta.json().catch(() => ({}));
+    if (!resposta.ok) erro.textContent = dados.erro || 'Something went wrong.';
+    else if (dados.webhook !== 200) erro.textContent = `The bot answered ${dados.webhook} to the webhook. See .local/simulator/bot.log.`;
+    buscar();
+  }
+
+  async function montarPainel() {
+    const config = await (await fetch('/api/config')).json();
+    pessoas = config.pessoas;
+    document.getElementById('membros').textContent = pessoas.map(p => p.nome).join(', ') + ', Pelada bot';
+
+    const quem = document.getElementById('pessoas');
+    pessoas.forEach(p => {
+      const botao = document.createElement('button');
+      botao.type = 'button';
+      botao.textContent = p.nome;
+      botao.classList.toggle('ativo', p.id === remetente);
+      botao.addEventListener('click', () => {
+        remetente = p.id;
+        quem.querySelectorAll('button').forEach(b => b.classList.toggle('ativo', b === botao));
+      });
+      quem.append(botao);
+    });
+
+    const cenarios = document.getElementById('cenarios');
+    config.cenarios.forEach(c => {
+      const botao = document.createElement('button');
+      botao.type = 'button';
+      botao.textContent = c.nome;
+      botao.addEventListener('click', () => postar('/api/lista', { lista: c.id }));
+      cenarios.append(botao);
+    });
+  }
+  document.querySelectorAll('[data-texto]').forEach(botao =>
+    botao.addEventListener('click', () => postar('/api/mensagem', { texto: botao.dataset.texto, citarLista: botao.dataset.citar === 'true' })));
+  document.getElementById('enviar').addEventListener('submit', e => {
+    e.preventDefault();
+    const campo = document.getElementById('texto');
+    if (!campo.value.trim()) return;
+    postar('/api/mensagem', { texto: campo.value, citarLista: document.getElementById('citar').checked });
+    campo.value = '';
+  });
+  document.getElementById('zoom').addEventListener('click', e => e.currentTarget.close());
+  document.getElementById('reenviar').addEventListener('click', () => {
+    if (linhasDaLista) postar('/api/lista', { texto: linhasDaLista.join('\n') });
+  });
+
+  montarPainel();
+  buscar();
+  setInterval(buscar, 500);
+</script>
+</body>
+</html>
