@@ -42,19 +42,7 @@ public static class RespostaDeCobranca
         }
 
         string modelo = mensagens[random.Next(mensagens.Count)];
-        List<string> linhas = [ModeloDeCobranca.Preencher(modelo, nomesNaoPagos, pagamento)];
-
-        if (ModeloDeCobranca.ListaOsNomes(modelo) is false)
-        {
-            linhas.AddRange([string.Empty, .. LinhasDeResposta.ListaDePendentes(nomesNaoPagos)]);
-        }
-
-        IReadOnlyList<string> linhasDoPagamento = ModeloDeCobranca.LinhasDoPagamento(pagamento);
-
-        if (ModeloDeCobranca.MostraOPagamento(modelo) is false && linhasDoPagamento.Count > 0)
-        {
-            linhas.AddRange([string.Empty, .. linhasDoPagamento]);
-        }
+        List<string> linhas = LinhasDeResposta.Cobranca(modelo, nomesNaoPagos, pagamento);
 
         return LinhasDeResposta.Juntar([.. linhas, .. avisos]);
     }
