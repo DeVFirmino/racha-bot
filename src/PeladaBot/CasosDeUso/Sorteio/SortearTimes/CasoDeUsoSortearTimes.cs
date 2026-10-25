@@ -116,9 +116,9 @@ public sealed partial class CasoDeUsoSortearTimes : ICasoDeUsoSortearTimes
                 resultado,
                 encontrada.Lista,
                 encontrada.Origem,
-                Grupo(resposta.IdDoGrupo).MensagensDeCobranca,
+                _opcoes.Value.ObterGrupo(resposta.IdDoGrupo).MensagensDeCobranca,
                 _random,
-                new DadosDoPagamento { Valor = Grupo(resposta.IdDoGrupo).ValorDaPelada, Link = Grupo(resposta.IdDoGrupo).LinkDePagamento },
+                new DadosDoPagamento { Valor = _opcoes.Value.ObterGrupo(resposta.IdDoGrupo).ValorDaPelada, Link = _opcoes.Value.ObterGrupo(resposta.IdDoGrupo).LinkDePagamento },
                 Fuso());
 
             RegistrarSemSorteio(_logger, idDaMensagem, resultado.GetType().Name, quantidadePaga);
@@ -129,7 +129,7 @@ public sealed partial class CasoDeUsoSortearTimes : ICasoDeUsoSortearTimes
 
         RegistrarSorteado(_logger, idDaMensagem, sorteados.Times.Count, sorteados.IgnorandoPendentes.Count);
 
-        OpcoesDoGrupo grupo = Grupo(resposta.IdDoGrupo);
+        OpcoesDoGrupo grupo = _opcoes.Value.ObterGrupo(resposta.IdDoGrupo);
         string legenda = LegendaDoSorteio.Compor(
             new EntradaDaLegendaDoSorteio
             {
@@ -234,9 +234,6 @@ public sealed partial class CasoDeUsoSortearTimes : ICasoDeUsoSortearTimes
         Azul = apelidos.Azul,
         SemColete = apelidos.SemColete,
     };
-
-    private OpcoesDoGrupo Grupo(string idDoGrupo) =>
-        _opcoes.Value.Grupos.Single(grupo => string.Equals(grupo.Id, idDoGrupo, StringComparison.Ordinal));
 
     private TimeZoneInfo Fuso() => HorarioDoGrupo.Carregar(_opcoes.Value.Fuso);
 

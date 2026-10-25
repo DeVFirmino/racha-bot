@@ -78,7 +78,7 @@ public sealed class CasoDeUsoCobrarPendentes : ICasoDeUsoCobrarPendentes
         string resposta = escolha switch
         {
             ListaEncontrada encontrada =>
-                RespostaDeCobranca.Compor(encontrada.Lista, encontrada.Origem, Grupo(pedido.IdDoGrupo).MensagensDeCobranca, _random, Pagamento(pedido.IdDoGrupo), HorarioDoGrupo.Carregar(_opcoes.Value.Fuso)),
+                RespostaDeCobranca.Compor(encontrada.Lista, encontrada.Origem, _opcoes.Value.ObterGrupo(pedido.IdDoGrupo).MensagensDeCobranca, _random, Pagamento(pedido.IdDoGrupo), HorarioDoGrupo.Carregar(_opcoes.Value.Fuso)),
             ListaNaoEncontrada => RespostasDeErro.CitarAListaParaCobrar,
             ListaCitadaIlegivel => RespostasDeErro.ListaCitadaIlegivel,
             _ => throw new InvalidOperationException($"Uma escolha de lista sem tratamento: {escolha.GetType().Name}."),
@@ -87,12 +87,9 @@ public sealed class CasoDeUsoCobrarPendentes : ICasoDeUsoCobrarPendentes
         await _respostas.EnviarTextoAsync(destino, resposta, cancellationToken);
     }
 
-    private OpcoesDoGrupo Grupo(string idDoGrupo) =>
-        _opcoes.Value.Grupos.Single(grupo => string.Equals(grupo.Id, idDoGrupo, StringComparison.Ordinal));
-
     private DadosDoPagamento Pagamento(string idDoGrupo)
     {
-        OpcoesDoGrupo grupo = Grupo(idDoGrupo);
+        OpcoesDoGrupo grupo = _opcoes.Value.ObterGrupo(idDoGrupo);
 
         return new DadosDoPagamento { Valor = grupo.ValorDaPelada, Link = grupo.LinkDePagamento };
     }
