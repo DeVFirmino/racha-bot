@@ -57,20 +57,7 @@ public static class RespostaSemSorteio
 
         string modelo = mensagensDeCobranca[random.Next(mensagensDeCobranca.Count)];
         const string SortearPagos = "Para sortear só os pagos, use !sortear pagos (mínimo de 4 pagos).";
-        bool listaOsNomes = ModeloDeCobranca.ListaOsNomes(modelo);
-        IReadOnlyList<string> linhasDoPagamento =
-            ModeloDeCobranca.MostraOPagamento(modelo) ? [] : ModeloDeCobranca.LinhasDoPagamento(pagamento);
-        List<string> linhas = [ModeloDeCobranca.Preencher(modelo, nomesPendentes, pagamento)];
-
-        if (listaOsNomes is false)
-        {
-            linhas.AddRange([string.Empty, .. LinhasDeResposta.ListaDePendentes(nomesPendentes)]);
-        }
-
-        if (linhasDoPagamento.Count > 0)
-        {
-            linhas.AddRange([string.Empty, .. linhasDoPagamento]);
-        }
+        List<string> linhas = LinhasDeResposta.Cobranca(modelo, nomesPendentes, pagamento);
 
         linhas.AddRange([string.Empty, SortearPagos]);
 

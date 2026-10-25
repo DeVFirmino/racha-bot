@@ -34,6 +34,26 @@ internal static class LinhasDeResposta
     public static IReadOnlyList<string> ListaDePendentes(IReadOnlyList<string> nomesNaoPagos) =>
         [$"💸 *Falta pagar ({nomesNaoPagos.Count}):*", .. nomesNaoPagos.Select(nome => $"👀 {MarcacaoDoWhatsApp.Neutralizar(nome)}")];
 
+    /// <summary>A cobrança preenchida, com os pendentes e o pagamento que o modelo ainda não mostra.</summary>
+    public static List<string> Cobranca(string modelo, IReadOnlyList<string> nomesNaoPagos, DadosDoPagamento? pagamento)
+    {
+        List<string> linhas = [ModeloDeCobranca.Preencher(modelo, nomesNaoPagos, pagamento)];
+
+        if (ModeloDeCobranca.ListaOsNomes(modelo) is false)
+        {
+            linhas.AddRange([string.Empty, .. ListaDePendentes(nomesNaoPagos)]);
+        }
+
+        IReadOnlyList<string> linhasDoPagamento = ModeloDeCobranca.LinhasDoPagamento(pagamento);
+
+        if (ModeloDeCobranca.MostraOPagamento(modelo) is false && linhasDoPagamento.Count > 0)
+        {
+            linhas.AddRange([string.Empty, .. linhasDoPagamento]);
+        }
+
+        return linhas;
+    }
+
     /// <summary>"Pedro, Lucas".</summary>
     public static string Nomes(IEnumerable<string> nomes) => string.Join(", ", nomes.Select(MarcacaoDoWhatsApp.Neutralizar));
 

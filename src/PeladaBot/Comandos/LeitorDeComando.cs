@@ -1,5 +1,4 @@
-using System.Globalization;
-using System.Text;
+using PeladaBot.Textos;
 
 namespace PeladaBot.Comandos;
 
@@ -36,7 +35,7 @@ public static class LeitorDeComando
 
         string[] palavras = texto.Split((char[]?)null, 3, StringSplitOptions.RemoveEmptyEntries);
         bool encontrado =
-            _comandosPorPalavra.TryGetValue(ChaveDeComparacao(palavras[0]), out TipoDeComando comando);
+            _comandosPorPalavra.TryGetValue(ComparacaoDeTexto.CriarChave(palavras[0]), out TipoDeComando comando);
 
         if (encontrado is false)
         {
@@ -45,25 +44,8 @@ public static class LeitorDeComando
 
         bool somentePagos = comando is TipoDeComando.Sortear
             && palavras.Length > 1
-            && string.Equals(ChaveDeComparacao(palavras[1]), PalavraPagos, StringComparison.Ordinal);
+            && string.Equals(ComparacaoDeTexto.CriarChave(palavras[1]), PalavraPagos, StringComparison.Ordinal);
 
         return new ComandoLido { Tipo = comando, SomentePagos = somentePagos };
-    }
-
-    /// <summary>A palavra sem acentos e em minúsculas, qualquer que seja a forma Unicode em que foi digitada.</summary>
-    private static string ChaveDeComparacao(string palavra)
-    {
-        string decomposta = palavra.Normalize(NormalizationForm.FormD);
-        StringBuilder construtor = new(decomposta.Length);
-
-        foreach (char caractere in decomposta)
-        {
-            if (CharUnicodeInfo.GetUnicodeCategory(caractere) is not UnicodeCategory.NonSpacingMark)
-            {
-                construtor.Append(char.ToLowerInvariant(caractere));
-            }
-        }
-
-        return construtor.ToString();
     }
 }

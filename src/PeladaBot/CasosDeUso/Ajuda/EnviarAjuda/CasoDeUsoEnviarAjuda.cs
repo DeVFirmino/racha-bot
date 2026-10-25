@@ -72,7 +72,7 @@ public sealed class CasoDeUsoEnviarAjuda : ICasoDeUsoEnviarAjuda
 
     private string Guia(PedidoEnviarAjuda pedido)
     {
-        OpcoesDoGrupo grupo = _opcoes.Value.Grupos.Single(grupo => string.Equals(grupo.Id, pedido.IdDoGrupo, StringComparison.Ordinal));
+        OpcoesDoGrupo grupo = _opcoes.Value.ObterGrupo(pedido.IdDoGrupo);
 
         return TextoDeAjuda.Compor(
             grupo.TituloDoCard,

@@ -13,4 +13,8 @@ public sealed class OpcoesDoBot
 
     /// <summary>Limites globais, iguais para todo grupo.</summary>
     public OpcoesDeLimites Limites { get; init; } = new();
+
+    /// <summary>O único grupo com esse id; configuração ausente ou duplicada é um erro.</summary>
+    internal OpcoesDoGrupo ObterGrupo(string idDoGrupo) =>
+        Grupos.Single(grupo => string.Equals(grupo.Id, idDoGrupo, StringComparison.Ordinal));
 }
