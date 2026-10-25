@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
@@ -203,13 +202,6 @@ public sealed partial class ClienteWaha : IMensageiroDoGrupo, IHistoricoDoGrupo
         try
         {
             using HttpResponseMessage resposta = await _httpClient.GetAsync(caminho, cancellationToken);
-
-            if (resposta.StatusCode is HttpStatusCode.NotFound)
-            {
-                RegistrarChamadaFalhou(_logger, operacao, "WAHA respondeu 404");
-
-                return null;
-            }
 
             if (resposta.IsSuccessStatusCode is false)
             {
