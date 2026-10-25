@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using PeladaBot.Textos;
 
 namespace PeladaBot.Listas;
 
@@ -74,7 +75,7 @@ public static partial class LeitorDaLista
     /// </summary>
     private static bool EhNota(string linha)
     {
-        string chave = TextoDaLista.ChaveDeComparacao(linha);
+        string chave = ComparacaoDeTexto.CriarChave(linha);
 
         if (chave.StartsWith(PalavraChaveDeNota, StringComparison.Ordinal) is false)
         {
@@ -89,7 +90,7 @@ public static partial class LeitorDaLista
 
     private static bool TentarLerTituloDaSecao(string linha, out SecaoDaLista secao)
     {
-        string chaveDoTitulo = TextoDaLista.ChaveDeComparacao(linha.TrimEnd(':').TrimEnd());
+        string chaveDoTitulo = ComparacaoDeTexto.CriarChave(linha.TrimEnd(':').TrimEnd());
 
         return _titulosDeSecao.TryGetValue(chaveDoTitulo, out secao);
     }
@@ -104,7 +105,7 @@ public static partial class LeitorDaLista
         secao.Add(new ItemDaLista
         {
             Nome = nome,
-            Chave = TextoDaLista.ChaveDeComparacao(nome),
+            Chave = ComparacaoDeTexto.CriarChave(nome),
             Pago = pago,
         });
     }
@@ -118,7 +119,7 @@ public static partial class LeitorDaLista
             return jogo;
         }
 
-        string rotulo = TextoDaLista.ChaveDeComparacao(linha[..separador].TrimEnd());
+        string rotulo = ComparacaoDeTexto.CriarChave(linha[..separador].TrimEnd());
         string valor = linha[(separador + 1)..].Trim();
 
         if (valor.Length == 0)

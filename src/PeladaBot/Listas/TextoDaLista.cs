@@ -3,7 +3,7 @@ using System.Text;
 
 namespace PeladaBot.Listas;
 
-/// <summary>Regras de limpeza e comparação para o texto da lista do grupo.</summary>
+/// <summary>Regras de limpeza para o texto da lista do grupo.</summary>
 internal static class TextoDaLista
 {
     private const int SeletorDeVariacaoDeTexto = 0xFE0E;
@@ -23,23 +23,6 @@ internal static class TextoDaLista
         }
 
         return string.Join(' ', construtor.ToString().Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
-    }
-
-    /// <summary>A chave usada para comparar nomes: sem acentos e em minúsculas, qualquer que seja a forma Unicode.</summary>
-    public static string ChaveDeComparacao(string texto)
-    {
-        string decomposta = texto.Normalize(NormalizationForm.FormD);
-        StringBuilder construtor = new(decomposta.Length);
-
-        foreach (char caractere in decomposta)
-        {
-            if (CharUnicodeInfo.GetUnicodeCategory(caractere) is not UnicodeCategory.NonSpacingMark)
-            {
-                construtor.Append(char.ToLowerInvariant(caractere));
-            }
-        }
-
-        return construtor.ToString();
     }
 
     private static bool EhDecoracao(Rune rune)
