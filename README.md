@@ -126,6 +126,33 @@ Os nomes e lugares dos exemplos são fictícios.
 
 Para deixar ligado de vez, rode os mesmos dois containers em qualquer servidor com Docker. Guarde o volume do WAHA (`/app/.sessions`): é ele que mantém o número conectado sem pedir o QR code de novo.
 
+## Deu ruim? (problemas comuns)
+
+A bola parou? Quase sempre é uma destas.
+
+### O bot não responde
+
+- **Mandou no grupo errado.** Ele só escuta o grupo do `BOT_GROUP_ID`. Outro grupo, ou o privado, é silêncio.
+- **`!sortear` não é cargo de admin.** Quem sorteia é a presidência cadastrada no bot, no máximo duas pessoas. Admin do grupo no WhatsApp não entra nessa lista. Na primeira vez ele fala. A mesma pessoa, nos 10 minutos seguintes (o padrão), manda de novo e ele fica quieto.
+- **O comando ficou no meio da frase.** A primeira palavra tem de ser `!sortear`, `!times`, `!pendentes`, `!cobrar` ou `!ajuda`. Maiúscula e acento tanto faz. `bora !sortear` não é comando.
+- **A mensagem demorou a chegar.** Mais de 2 minutos entre o envio e o bot receber (o padrão) e ele descarta.
+- **O WAHA não está `WORKING`.** Sessão `FAILED` ou `STOPPED`: ele não lê o grupo até voltar.
+- **O bot nem subiu.** Sem `BOT_GROUP_ID` ou sem `BOT_PRESIDENT_ID` ele recusa iniciar. O log diz qual falta.
+- **A chave do webhook não é a mesma dos dois lados.** O WAHA assina com `WAHA_WEBHOOK_HMAC_KEY` e o bot confere essa chave. Se divergir, a resposta é 401 e o comando nem entra na fila. No Compose, uma variável só alimenta os dois.
+- **Respondeu demais.** No padrão, 30 envios numa janela de 1 hora e ele segura os próximos. É o freio para não parecer spam.
+
+### Pediu o QR code de novo
+
+O número conectado mora em `/app/.sessions` (no Compose, o volume `waha_sessions`). Sumiu o volume, o WhatsApp desconecta e o dashboard pede o QR outra vez. Não apague esse volume.
+
+### O sorteio parou por falta de ✅
+
+`!sortear` espera a lista de jogadores inteira com ✅. Quem está na espera sem ✅ não segura o jogo. `!pendentes` mostra os nomes. Se a presidência quiser sortear mesmo assim, `!sortear pagos` entra só com quem já pagou, no mínimo 4.
+
+### O número foi bloqueado
+
+O caminho até o WhatsApp é o WAHA, e ele não é oficial. Bloqueio de número pode acontecer. Chip dedicado para o bot, nunca o seu. O bot responde pouco para diminuir o risco, mas o risco fica.
+
 ## Personalizar
 
 Tudo fica no [`appsettings.json`](src/PeladaBot/appsettings.json), e cada item também pode vir por variável de ambiente.
