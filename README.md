@@ -13,7 +13,7 @@
 
 Você conhece a cena. A lista passa de mão em mão, alguém reenvia uma cópia velha e um nome some, ninguém lembra quem pagou, e na hora do jogo o sorteio sai no papelzinho.
 
-O racha-bot entra no grupo e resolve isso. Ele lê a lista do jeito que o grupo já escreve, confere quem marcou ✅ e devolve os times prontos numa imagem. Ninguém precisa instalar app nem aprender nada novo.
+O racha-bot entra no grupo pra resolver isso. Ele lê a lista do jeito que vocês já escrevem, confere quem marcou ✅ e devolve os times prontos numa imagem. Ninguém precisa instalar app nem aprender nada novo.
 
 É grátis, de código aberto e roda num servidor seu.
 
@@ -29,7 +29,7 @@ A página sobe em http://127.0.0.1:8095/. Manda a lista, marca o ✅, troca entr
 
 ## Como funciona
 
-1. **O grupo manda a lista como sempre.** Com os goleiros fixos, os jogadores e a lista de espera.
+1. **O grupo manda a lista como sempre.** Goleiros fixos, jogadores e lista de espera, no texto de sempre.
 2. **Quem paga marca o ✅** ao lado do próprio nome.
 3. **O presidente responde a lista com `!sortear`.** Em segundos, o bot manda o card dos times e a legenda com as escalações.
 
@@ -47,6 +47,8 @@ A página sobe em http://127.0.0.1:8095/. Manda a lista, marca o ✅, troca entr
 - **Não vira spam:** só responde a comandos, só no seu grupo e com limite de mensagens.
 
 ## Comandos
+
+Manda um destes no grupo. Papo normal ele deixa passar.
 
 | Comando | Quem usa | O que faz |
 |---|---|---|
