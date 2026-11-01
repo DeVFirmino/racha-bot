@@ -33,6 +33,8 @@ A página sobe em http://127.0.0.1:8095/. Manda a lista, marca o ✅, troca entr
 2. **Quem paga marca o ✅** ao lado do próprio nome.
 3. **O presidente responde a lista com `!sortear`.** Em segundos, o bot manda o card dos times e a legenda com as escalações.
 
+<p align="center"><img src="docs/img/fluxo.png" alt="Diagrama do fluxo do racha-bot: o grupo do WhatsApp envia mensagens ao WAHA, que chama o webhook do bot (valida HMAC, fila, parser da lista, sorteio dos times e card com ImageSharp), e o card volta pelo WAHA para o grupo." width="880"></p>
+
 <p align="center"><img src="docs/img/card-exemplo.png" alt="Card do sorteio: Pelada de Quarta, time laranja contra time verde, cada jogador com camisa e nome, goleiros de preto" width="420"></p>
 
 ## O que ele faz por você
@@ -130,7 +132,7 @@ Tudo fica no [`appsettings.json`](src/PeladaBot/appsettings.json), e cada item t
 
 ## Para desenvolvedores
 
-O bot é uma API em .NET 10 que recebe os webhooks do WAHA, coloca os comandos numa fila e responde pelo próprio WAHA. Não tem banco de dados.
+O bot é uma API em .NET 10 que recebe os webhooks do WAHA, coloca os comandos numa fila e responde pelo próprio WAHA. Não tem banco de dados. O desenho desse caminho está em `docs/img/fluxo.png`; a fonte editável é `docs/img/fluxo.excalidraw`.
 
 ```sh
 dotnet build
