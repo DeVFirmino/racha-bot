@@ -147,7 +147,7 @@ O número conectado mora em `/app/.sessions` (no Compose, o volume `waha_session
 
 ### O sorteio parou por falta de ✅
 
-`!sortear` espera a lista de jogadores inteira com ✅. Quem está na espera sem ✅ não segura o jogo. `!pendentes` mostra os nomes. Se a presidência quiser sortear mesmo assim, `!sortear pagos` entra só com quem já pagou, no mínimo 4.
+`!sortear` espera a lista de jogadores inteira com ✅. Quem está na espera sem ✅ não segura o jogo. `!pendentes` mostra os nomes. Se a presidência quiser sortear mesmo assim, `!sortear pagos` entra só com quem já pagou, no mínimo 4 jogadores de linha.
 
 ### O número foi bloqueado
 
