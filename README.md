@@ -17,6 +17,16 @@ O racha-bot entra no grupo e resolve isso. Ele lê a lista do jeito que o grupo 
 
 É grátis, de código aberto e roda num servidor seu.
 
+## Teste em 1 minuto, sem WhatsApp
+
+Dá para ver o card sair antes de conectar número nenhum. Na raiz do repositório, com Python 3 e o SDK do .NET 10:
+
+```sh
+python3 scripts/group-simulator.py --web
+```
+
+A página sobe em http://127.0.0.1:8095/. Manda a lista, marca o ✅, troca entre presidente e integrante e usa os comandos. O card aparece no chat. O que o simulador faz por baixo está em [Para desenvolvedores](#para-desenvolvedores).
+
 ## Como funciona
 
 1. **O grupo manda a lista como sempre.** Com os goleiros fixos, os jogadores e a lista de espera.
@@ -133,7 +143,7 @@ Para ver o bot responder sem celular e sem WhatsApp, use o simulador do grupo. E
 python3 scripts/group-simulator.py --web
 ```
 
-Lá você manda a lista, marca quem pagou, troca entre presidente e integrante e usa os comandos. O card aparece no chat.
+Lá você manda a lista, marca quem pagou, troca entre presidente e integrante e usa os comandos. O card aparece no chat. O atalho, sem o resto da instalação, está em [Teste em 1 minuto, sem WhatsApp](#teste-em-1-minuto-sem-whatsapp).
 
 Quer ajudar? Veja o [guia de contribuição](.github/CONTRIBUTING.md).
 
