@@ -8,6 +8,7 @@ Issues e pull requests são bem-vindos.
 - Mantenha uma preocupação por pull request, e explique o porquê na descrição.
 - Tudo fica em português: código, logs, comentários, docs, respostas do bot e comandos.
 - Nunca comite números de telefone reais, IDs do WhatsApp, nomes de um grupo real ou payloads crus do WAHA. As fixtures usam os IDs falsos dos testes.
+- O CI (`.github/workflows/commit-authors.yml`) recusa autor, committer ou trailer de commit, e o título ou a descrição do pull request, quando atribuem o trabalho a um agente: conta de bot conhecida, a frase "Generated with" ou o emoji de robô.
 
 ## Builds de Release
 
