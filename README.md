@@ -1,5 +1,10 @@
 # racha-bot
 
+[![CI](https://github.com/DeVFirmino/racha-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/DeVFirmino/racha-bot/actions/workflows/ci.yml)
+[![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)](https://dotnet.microsoft.com/download/dotnet/10.0)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose/)
+[![MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 **O sorteio dos times da pelada, direto no grupo do WhatsApp.**
 
 <p align="center">
