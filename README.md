@@ -106,7 +106,15 @@ Os nomes e lugares dos exemplos são fictícios.
 
    Abra http://localhost:3000/dashboard, entre com o login do `.env`, inicie a sessão `default` e escaneie o QR code no celular do chip (WhatsApp → Aparelhos conectados).
 
-3. **Coloque o número do bot no grupo** e pegue dois ids no Swagger do WAHA (http://localhost:3000, com a `WAHA_API_KEY`): o do grupo, em `GET /api/default/groups` (termina em `@g.us`), e o seu, entre os participantes do grupo em `GET /api/default/groups/{id}/participants` (termina em `@c.us` ou `@lid`). Coloque em `BOT_GROUP_ID` e `BOT_PRESIDENT_ID` no `.env`.
+3. **Grave o grupo e a presidência no `.env`.**
+
+   a. Adicione o número do bot ao grupo da pelada.
+
+   b. Abra o Swagger em http://localhost:3000. A página pede o login do dashboard (`WAHA_DASHBOARD_USERNAME` e `WAHA_DASHBOARD_PASSWORD`). Autorize as chamadas com a `WAHA_API_KEY`: o WAHA exige essa chave no cabeçalho `X-Api-Key`.
+
+   c. Chame `GET /api/default/groups`. O id do grupo termina em `@g.us`. Esse valor vai em `BOT_GROUP_ID`.
+
+   d. Chame `GET /api/default/groups/{id}/participants`, trocando `{id}` pelo id do passo anterior. O seu id termina em `@c.us` ou `@lid`. Esse valor vai em `BOT_PRESIDENT_ID`.
 
 4. **Ligue o bot:**
 
