@@ -139,7 +139,7 @@ A bola parou? Quase sempre é uma destas.
 - **O comando ficou no meio da frase.** A primeira palavra tem de ser `!sortear`, `!times`, `!pendentes`, `!cobrar` ou `!ajuda`. Maiúscula e acento tanto faz. `bora !sortear` não é comando.
 - **A mensagem demorou a chegar.** Mais de 2 minutos entre o envio e o bot receber (o padrão) e ele descarta.
 - **O WAHA não está `WORKING`.** Sessão `FAILED` ou `STOPPED`: ele não lê o grupo até voltar.
-- **O bot nem subiu.** Sem `BOT_GROUP_ID` ou sem `BOT_PRESIDENT_ID` ele recusa iniciar. O log diz qual falta.
+- **O bot nem subiu.** Sem `BOT_GROUP_ID` ou sem `BOT_PRESIDENT_ID` ele recusa iniciar. O log diz o que falta.
 - **A chave do webhook não é a mesma dos dois lados.** O WAHA assina com `WAHA_WEBHOOK_HMAC_KEY` e o bot confere essa chave. Se divergir, a resposta é 401 e o comando nem entra na fila. No Compose, uma variável só alimenta os dois.
 - **Respondeu demais.** No padrão, 30 envios numa janela de 1 hora e ele segura os próximos. É o freio para não parecer spam.
 
