@@ -80,6 +80,30 @@ check_prose() {
   done < <(trailer_lines "$text")
 }
 
+# The hosting platform wraps the submitted pull request text in these comments
+# and appends a footer after the closing one. That wrapper is not part of the
+# text under review. Drop it, then scan what was submitted. A marker inside the
+# submitted text still fails.
+submitted_text() {
+  local text="$1"
+  local line
+  local skipping=0
+
+  while IFS= read -r line || [ -n "$line" ]; do
+    if [ "$line" = "<!-- CURSOR_AGENT_PR_BODY_BEGIN -->" ]; then
+      continue
+    fi
+    if [ "$line" = "<!-- CURSOR_AGENT_PR_BODY_END -->" ]; then
+      skipping=1
+      continue
+    fi
+    if [ "$skipping" -eq 1 ]; then
+      continue
+    fi
+    printf '%s\n' "$line"
+  done <<< "$text"
+}
+
 check_commit() {
   local sha="$1"
   local author_name author_email committer_name committer_email message
@@ -135,8 +159,8 @@ for sha in "${commits[@]}"; do
 done
 
 if [ "$EVENT_NAME" = "pull_request" ]; then
-  check_prose "pull request title" "$PR_TITLE"
-  check_prose "pull request body" "$PR_BODY"
+  check_prose "pull request title" "$(submitted_text "$PR_TITLE")"
+  check_prose "pull request body" "$(submitted_text "$PR_BODY")"
 fi
 
 if [ "$failures" -gt 0 ]; then
