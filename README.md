@@ -15,7 +15,7 @@ Você conhece a cena. A lista passa de mão em mão, alguém reenvia uma cópia 
 
 O racha-bot entra no grupo pra resolver isso. Ele lê a lista do jeito que vocês já escrevem, confere quem marcou ✅ e devolve os times prontos numa imagem. Ninguém precisa instalar app nem aprender nada novo.
 
-É grátis, de código aberto e roda num servidor seu.
+Deixei um simulador no repositório pra quem quiser ver como a lista da pelada vira um card com os times. O bot é gratuito, tem código aberto e roda no seu servidor.
 
 ## Teste em 1 minuto, sem WhatsApp
 
